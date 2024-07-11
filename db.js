@@ -15,7 +15,12 @@ const scrapeSchema = new mongoose.Schema(
 const Scrape = mongoose.model("Scrape", scrapeSchema);
 
 // MongoDB connection function
-async function connectToDB(mongoURI) {
+const connectToDB = async () => {
+  const mongoURI = process.env.MONGODB_URI;
+  if (!mongoURI) {
+    throw new Error("MONGODB_URI not defined in .env file");
+  }
+
   try {
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
@@ -25,7 +30,7 @@ async function connectToDB(mongoURI) {
   } catch (err) {
     console.error("MongoDB connection error:", err);
   }
-}
+};
 
 module.exports = {
   connectToDB,
